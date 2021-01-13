@@ -16,12 +16,17 @@ from airflow.contrib.operators.file_to_gcs import FileToGoogleCloudStorageOperat
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 from airflow.models import Variable
 from google.cloud import storage, bigquery
-from csv_cleaner_func import csv_cleaner_function
-
+from csv_cleaner_func import csv_cleaner
+    
 DATA_DOWNLOAD_FILEPATH = os.getenv('DATA_DOWNLOAD_FILEPATH')
 HYDRO_DATA_PROJECT_ID=os.getenv('HYDRO_DATA_PROJECT_ID')
 HYDRO_DATA_LANDING_BUCKET = Variable.get('HYDRO_DATA_LANDING_BUCKET')
-HYDRO_DATASET = 'staging'
+HYDRO_DATASET = None
+
+def check_variables():
+    if all(arg is not None for arg in [DATA_DOWNLOAD_FILEPATH,HYDRO_DATA_PROJECT_ID,HYDRO_DATA_LANDING_BUCKET,HYDRO_DATASET]):
+        print("Variables are set")
+check_variables() 
 
 default_args = {
     'owner': 'JC U',
@@ -47,7 +52,7 @@ with DAG(
     
     clean_csv_before_upload = PythonOperator(
         task_id='clean_csv_before_upload',
-        python_callable=csv_cleaner_function,
+        python_callable=csv_cleaner,
         do_xcom_push=True
     )
 
