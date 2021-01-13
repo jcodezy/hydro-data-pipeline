@@ -21,7 +21,7 @@ from csv_cleaner_func import csv_cleaner
 DATA_DOWNLOAD_FILEPATH = os.getenv('DATA_DOWNLOAD_FILEPATH')
 HYDRO_DATA_PROJECT_ID=os.getenv('HYDRO_DATA_PROJECT_ID')
 HYDRO_DATA_LANDING_BUCKET = Variable.get('HYDRO_DATA_LANDING_BUCKET')
-HYDRO_DATASET = None
+HYDRO_DATASET = 'staging'
 
 def check_variables():
     if all(arg is not None for arg in [DATA_DOWNLOAD_FILEPATH,HYDRO_DATA_PROJECT_ID,HYDRO_DATA_LANDING_BUCKET,HYDRO_DATASET]):
