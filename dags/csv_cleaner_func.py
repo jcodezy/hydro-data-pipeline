@@ -10,7 +10,7 @@ load_dotenv(find_dotenv())
 DATA_DOWNLOAD_FILEPATH = os.getenv('DATA_DOWNLOAD_FILEPATH')
 
 def check_dataframe_for_na_values(column):
-    if column.dtype != 'float64':
+    if not isinstance(column, float):   
         print(f"Data in {column} is not of float type as expected. Check data source.")
         return
 
