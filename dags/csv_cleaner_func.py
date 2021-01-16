@@ -10,9 +10,10 @@ load_dotenv(find_dotenv())
 DATA_DOWNLOAD_FILEPATH = os.getenv('DATA_DOWNLOAD_FILEPATH')
 
 def check_dataframe_for_na_values(column):
-    if not isinstance(column, float):   
-        print(f"Data in {column} is not of float type as expected. Check data source.")
-        return
+    if column.dtype != 'float64':
+        print(f"{column} is not what is expected. Check data source")
+        return 
+    print(f"Values in {column} is float as expected.")
 
 def csv_cleaner():
     if not DATA_DOWNLOAD_FILEPATH:
