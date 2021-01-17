@@ -22,8 +22,6 @@ to_date_day = to_date.strftime("%d")
 to_date_month = to_date.strftime("%b")
 to_date_year = to_date.strftime("%Y")
 
-DOWNLOAD_PATH = os.getenv('BC_HYDRO_DOWNLOAD_PATH')
-
 def download_csv_raw(from_date_day=from_date_day, from_date_month=from_date_month, from_date_year=from_date_year, to_date_day=to_date_day, to_date_month=to_date_month, to_date_year=to_date_year):
 
     """
@@ -125,12 +123,11 @@ def download_csv_raw(from_date_day=from_date_day, from_date_month=from_date_mont
                 print("Selenium script ran successfully. Exiting . . . .")
                 driver.quit()
                 return
-                # sys.exit()
             else:
                 print("Error with file & keyword")
                 continue
         else:
             timeout+=1 
             sleep(1)
-    print("If you see this, that means it did not break in the while loop")
+    print("Could not download file -- exiting script.")
     driver.quit()
