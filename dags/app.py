@@ -5,7 +5,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 import sys
 sys.path.append(os.getenv('SELENIUM_SCRIPT_FILEPATH')) 
-from selenium_script import download_yesterdays_csv_raw
+from selenium_script import download_csv_raw
 from datetime import datetime,timedelta
 from airflow import DAG 
 from airflow.utils.dates import days_ago
@@ -47,7 +47,7 @@ with DAG(
 
     download_yesterdays_csv = PythonOperator(
         task_id='download_yesterdays_csv',
-        python_callable=download_yesterdays_csv_raw #selenium script
+        python_callable=download_csv_raw #selenium script
     )
     
     clean_csv_before_upload = PythonOperator(
