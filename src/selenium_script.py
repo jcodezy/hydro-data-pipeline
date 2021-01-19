@@ -122,7 +122,7 @@ def download_csv_raw(from_date_day=from_date_day, from_date_month=from_date_mont
                 driver.find_element_by_xpath(""" //button[@id='btnLogout'] """).click()
                 print("Selenium script ran successfully. Exiting . . . .")
                 driver.quit()
-                return
+                return f"{DOWNLOAD_PATH}/{latest_file}" 
             else:
                 print("Error with file & keyword")
                 continue
@@ -131,3 +131,5 @@ def download_csv_raw(from_date_day=from_date_day, from_date_month=from_date_mont
             sleep(1)
     print("Could not download file -- exiting script.")
     driver.quit()
+
+    return f"{DOWNLOAD_PATH}/"

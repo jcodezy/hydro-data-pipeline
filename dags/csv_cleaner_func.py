@@ -6,7 +6,6 @@ from datetime import datetime,timedelta
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
-
 DATA_DOWNLOAD_FILEPATH = os.getenv('DATA_DOWNLOAD_FILEPATH')
 
 def check_dataframe_for_na_values(column):
