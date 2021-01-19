@@ -29,7 +29,7 @@ def clean_historical_dataset(historical_dataset_to_clean=None):
         df = df.rename(columns={'Interval Start Date/Time':'interval_start_date_time','Net Consumption (kWh)':'net_consumption_kwh'})
         df['interval_start_date_time'] = pd.to_datetime(df['interval_start_date_time'])
 
-        if df['net_consumption_kwh'].dtype not in ['float64', 'float']:
+        if df['net_consumption_kwh'].dtype not in ['float64', 'float']: # some kwh are "n/a" 
             try:
                 df['net_consumption_kwh'].fillna(df['net_consumption_kwh'].mean(), inplace=True)
                 df.astype({'net_consumption_kwh': 'float64'})
@@ -39,6 +39,7 @@ def clean_historical_dataset(historical_dataset_to_clean=None):
 
         parquet_file_title = f"{from_date_day}{from_date_month}{from_date_year}-{to_date_day}{to_date_month}{to_date_year}"
         df.to_parquet(f"{DATA_DOWNLOAD_FILEPATH}/{parquet_file_title}.parquet", index=False)
+        print(f"Sucessfully downloaded: {parquet_file_title}.parquet")
         return f"{DATA_DOWNLOAD_FILEPATH}/{parquet_file_title}.parquet"
 
     else:
