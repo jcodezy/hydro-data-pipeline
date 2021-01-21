@@ -132,4 +132,4 @@ def download_csv_raw(from_date_day=from_date_day, from_date_month=from_date_mont
     print("Could not download file -- exiting script.")
     driver.quit()
 
-    return f"{DOWNLOAD_PATH}/"
+    return 
