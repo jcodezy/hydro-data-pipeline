@@ -61,7 +61,7 @@ def clean_historical_dataset(historical_dataset_to_clean, from_date_day, from_da
 
 def upload_historical_data_to_gcs(destination_bucket, source_file_name, destination_blob_name):
     try:
-        storage_client = storage.Client(project='jc-hydro-data')
+        storage_client = storage.Client(project=HYDRO_DATA_PROJECT_ID)
         bucket = storage_client.bucket(destination_bucket)
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_filename(source_file_name, content_type='parquet')
