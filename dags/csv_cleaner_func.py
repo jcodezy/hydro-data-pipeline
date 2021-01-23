@@ -9,12 +9,18 @@ load_dotenv(find_dotenv())
 DATA_DOWNLOAD_FILEPATH = os.getenv('DATA_DOWNLOAD_FILEPATH')
 
 def check_dataframe_for_na_values(column):
+
+    """ Checks if dataframe has NaN values. """
+
     if column.dtype != 'float64':
         print(f"{column} is not what is expected. Check data source")
         return 
     print(f"Values in {column} is float as expected.")
 
 def csv_cleaner():
+
+    " Takes a raw CSV file, and removes personal identifying information and checks for correct data types. "
+
     if not DATA_DOWNLOAD_FILEPATH:
         print("Download filepath is not defined")
     fpath = f'{DATA_DOWNLOAD_FILEPATH}*.csv'
@@ -31,7 +37,6 @@ def csv_cleaner():
     df = df[df["Interval Start Date/Time"].str.startswith(f"{yesterday}")].reset_index(drop=True)
     df["Interval Start Date/Time"] = pd.to_datetime(df["Interval Start Date/Time"], infer_datetime_format=True, yearfirst=True, format="%Y-%m-%d %H:%M")
     df = df.rename(columns={"Interval Start Date/Time": "interval_start_date_time", "Net Consumption (kWh)": "net_consumption_kwh"})
-    print(df.dtypes)
 
     # create a check to see if the rows aren't all "N/A" as a result of data not being available from bc hydro or data is corrupted
     check_dataframe_for_na_values(df['net_consumption_kwh']) 
