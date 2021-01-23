@@ -20,7 +20,17 @@ from_date_day, from_date_month, from_date_year = '03', 'Aug', '2020' # date when
 to_date_day, to_date_month, to_date_year = '10', 'Jan', '2021' # daily DAG tasks started on Jan 11th 2021 
 
 # clean historical data set 
-def clean_historical_dataset(historical_dataset_to_clean, from_date_day, from_date_month, from_date_year, to_date_day, to_date_month, to_date_year):
+def clean_historical_dataset(
+    historical_dataset_to_clean, 
+    from_date_day, 
+    from_date_month, 
+    from_date_year, 
+    to_date_day, 
+    to_date_month, 
+    to_date_year
+):
+
+    " Cleans the historical dataset that's returned from download_csv_raw() func and returns a parquet file. "
 
     if historical_dataset_to_clean:
         df = pd.read_csv(
@@ -41,6 +51,7 @@ def clean_historical_dataset(historical_dataset_to_clean, from_date_day, from_da
 
         # converting 'Aug' to 08 to match prefix naming in gcs; ie. '20200803' instead of '2020Aug..'
         from_date_month, to_date_month = "0" + str(strptime(from_date_month, '%b').tm_mon), "0" + str(strptime(to_date_month, '%b').tm_mon) 
+
         # convert csv file to .parquet file
         parquet_file_title = f"{from_date_year}{from_date_month}{from_date_day}-{to_date_year}{to_date_month}{to_date_day}"
         df.to_parquet(f"{DATA_DOWNLOAD_FILEPATH}/{parquet_file_title}.parquet", index=False)
@@ -48,7 +59,7 @@ def clean_historical_dataset(historical_dataset_to_clean, from_date_day, from_da
         
         # delete historical dataset from local dir
         try:
-            os.remove(f"{historical_dataset_to_clean}")
+            os.remove(historical_dataset_to_clean)
         except:
             print(f"Could not remove {historical_dataset_to_clean}")
         
@@ -60,6 +71,9 @@ def clean_historical_dataset(historical_dataset_to_clean, from_date_day, from_da
 
 
 def upload_historical_data_to_gcs(destination_bucket, source_file_name, destination_blob_name):
+
+    " Uploads a local file to my google cloud storage landing bucket. "
+
     try:
         storage_client = storage.Client(project=HYDRO_DATA_PROJECT_ID)
         bucket = storage_client.bucket(destination_bucket)
