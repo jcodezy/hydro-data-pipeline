@@ -20,11 +20,14 @@ from csv_cleaner_func import csv_cleaner
     
 DATA_DOWNLOAD_FILEPATH = os.getenv('DATA_DOWNLOAD_FILEPATH')
 HYDRO_DATA_PROJECT_ID=os.getenv('HYDRO_DATA_PROJECT_ID')
-HYDRO_DATA_LANDING_BUCKET = Variable.get('HYDRO_DATA_LANDING_BUCKET')
-HYDRO_DATASET = 'staging'
+HYDRO_DATA_LANDING_BUCKET = os.getenv('HYDRO_DATA_LANDING_BUCKET')
+HYDRO_STAGING_DATASET = os.getenv('HYDRO_STAGING_DATASET')
+GOOGLE_CLOUD_STORAGE_CONN_ID = os.getenv('GOOGLE_CLOUD_STORAGE_CONN_ID')
+BIGQUERY_CONN_ID = os.getenv('BIGQUERY_CONN_ID')
+BIGQUERY_DAILY_HYDRO_TABLE = os.getenv('BIGQUERY_DAILY_HDYRO_TABLE')
 
 def check_variables():
-    if all(arg is not None for arg in [DATA_DOWNLOAD_FILEPATH,HYDRO_DATA_PROJECT_ID,HYDRO_DATA_LANDING_BUCKET,HYDRO_DATASET]):
+    if all(arg is not None for arg in [DATA_DOWNLOAD_FILEPATH,HYDRO_DATA_PROJECT_ID,HYDRO_DATA_LANDING_BUCKET,HYDRO_STAGING_DATASET]):
         print("Variables are set")
 check_variables() 
 
@@ -61,7 +64,7 @@ with DAG(
         src=f'{DATA_DOWNLOAD_FILEPATH}' + '''{{ ti.xcom_pull(task_ids='clean_csv_before_upload') }}''',
         dst='''{{ ti.xcom_pull(task_ids='clean_csv_before_upload') }}''',
         bucket=HYDRO_DATA_LANDING_BUCKET,
-        google_cloud_storage_conn_id='gcp_hydro_data',
+        google_cloud_storage_conn_id=GOOGLE_CLOUD_STORAGE_CONN_ID,
         mime_type='parquet'
     )
 
@@ -84,10 +87,10 @@ with DAG(
         bucket=HYDRO_DATA_LANDING_BUCKET,
         source_objects=['*.parquet'], 
         source_format='PARQUET',
-        destination_project_dataset_table=f'{HYDRO_DATA_PROJECT_ID}:{HYDRO_DATASET}.daily_hydro_data',
+        destination_project_dataset_table=f'{HYDRO_DATA_PROJECT_ID}:{HYDRO_STAGING_DATASET}.{BIGQUERY_DAILY_HYDRO_TABLE}',
         schema_fields=schema_fields, 
         skip_leading_rows=1,
-        bigquery_conn_id='hydro_data_bigquery_conn',
+        bigquery_conn_id=BIGQUERY_CONN_ID,
         create_disposition='CREATE_IF_NEEDED',
         write_disposition='WRITE_TRUNCATE', 
     )
