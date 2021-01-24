@@ -34,10 +34,12 @@ I created a backfill.py job to download historical data up until the daily DAG s
     - remove personal identifying information 
     - fix column names; removed spaces and replaced with underscores and used lowercase to match bigquery column name constraints 
     - check that kwh column is of float type
-        - if column is found to have NaN values, fill NaN values with column (kwh) average  
+        - if column is found to have NaN values, fill NaN values with column (kwh) average (mean imputation)
     - save to parquet file 
 
 3. Upload cleaned file to google cloud storage using the FileToGoogleCloudStorage operator. Below is the landing bucket with historical data (backfill.py) as the first entry and then the daily entries thereafter.  
 ![landing bucket](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/gcs_landing_bucket_w_historical.png)
 
-4. 
+4. Even though bigquery infers a schema based on the parquet file, I decided to be verbose and define the schema anyway as bigquery was inferring a BIGINT datatype for the datetime column.
+5. Transfer google cloud storage files to bigquery using 'WRITE_TRUNCATE' write_disposition; as bigquery has no fees on loading a bq table, I figured it was good to use WRITE_TRUNCATE to be idempotent. 
+![bigquery schema](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/bigquery_schema.png)
