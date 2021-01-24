@@ -1,4 +1,3 @@
-import pandas as pd
 import os
 import glob
 from dotenv import load_dotenv, find_dotenv
@@ -9,12 +8,10 @@ from selenium_script import download_csv_raw
 from datetime import datetime,timedelta
 from airflow import DAG 
 from airflow.utils.dates import days_ago
-from airflow.contrib.sensors.file_sensor import FileSensor
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.contrib.operators.file_to_gcs import FileToGoogleCloudStorageOperator
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
-from airflow.models import Variable
 from google.cloud import storage, bigquery
 from csv_cleaner_func import csv_cleaner
     
@@ -68,7 +65,7 @@ with DAG(
         mime_type='parquet'
     )
 
-    # schema for bq table 
+    # schema for bigquery table 
     schema_fields = [
         {
             "name": "interval_start_date_time",
