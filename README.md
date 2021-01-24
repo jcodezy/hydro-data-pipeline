@@ -26,15 +26,18 @@ I created a backfill.py job to download historical data up until the daily DAG s
 - Create alternate tables / views in BigQuery for further analytical processing
 - Query BigQuery tables and use streamlit to create data visualization dashboard 
 
-#### Detailed Workflow 
+### Detailed Workflow 
 1. Download dataset using selenium script. This is what a sample of the data looks like with no cleaning. 
 ![Raw data sample](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/raw_csv_download_sample.png)
 
-2. Data cleaning steps 
+2. Data cleaning steps: 
     - remove personal identifying information 
+    - fix column names; removed spaces and replaced with underscores and used lowercase to match bigquery column name constraints 
     - check that kwh column is of float type
-        - if column is found to have NaN values, fill NaN values with column average  
+        - if column is found to have NaN values, fill NaN values with column (kwh) average  
     - save to parquet file 
 
-3. Upload cleaned file to google cloud storage. This is the landing bucket with historical data (backfill.py)
+3. Upload cleaned file to google cloud storage using the FileToGoogleCloudStorage operator. Below is the landing bucket with historical data (backfill.py) as the first entry and then the daily entries thereafter.  
 ![landing bucket](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/gcs_landing_bucket_w_historical.png)
+
+4. 
