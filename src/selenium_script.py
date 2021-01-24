@@ -67,9 +67,9 @@ def download_csv_raw(
     driver.find_element_by_xpath(" //div[@class='extra']/ul/li/a[@class='icon billing_export'] ").click()
     sleep(1)
     driver.execute_script(" window.scrollTo(0, 500) ")
-    driver.find_element_by_id(" data-export-consumption-history ").click()
+    driver.find_element_by_xpath(" //input[@type='radio' and @id='data-export-consumption-history'] ").click()
     sleep(1) 
-    driver.find_element_by_id(" export-format-csv ").click()
+    driver.find_element_by_xpath(" //input[@type='radio' and @id ='export-format-csv'] ").click
     sleep(1)
 
     #  Fill out date range box #1 (from date)
