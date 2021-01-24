@@ -28,7 +28,7 @@ I created a backfill.py job to download historical data up until the daily DAG s
 
 #### Detailed Workflow 
 1. Download dataset using selenium script. This is what a sample of the data looks like with no cleaning. 
-![Raw data sample](/Users/jculat-ulula/hydro_data/markdown_assets/raw_csv_download_sample.png)
+![Raw data sample](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/raw_csv_download_sample.png)
 
 2. Data cleaning steps 
     - remove personal identifying information 
@@ -37,4 +37,4 @@ I created a backfill.py job to download historical data up until the daily DAG s
     - save to parquet file 
 
 3. Upload cleaned file to google cloud storage. This is the landing bucket with historical data (backfill.py)
-![landing bucket](/Users/jculat-ulula/hydro_data/markdown_assets/gcs_landing_bucket_w_historical.png)
+![landing bucket](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/gcs_landing_bucket_w_historical.png)
