@@ -25,3 +25,16 @@ I created a backfill.py job to download historical data up until the daily DAG s
 - Create a task that ensures that every daily file is uploaded to gcs; if not, run selenium script for missing days and upload to gcs 
 - Create alternate tables / views in BigQuery for further analytical processing
 - Query BigQuery tables and use streamlit to create data visualization dashboard 
+
+#### Detailed Workflow 
+1. Download dataset using selenium script. This is what a sample of the data looks like with no cleaning. 
+![Raw data sample](/Users/jculat-ulula/hydro_data/markdown_assets/raw_csv_download_sample.png)
+
+2. Data cleaning steps 
+    - remove personal identifying information 
+    - check that kwh column is of float type
+        - if column is found to have NaN values, fill NaN values with column average  
+    - save to parquet file 
+
+3. Upload cleaned file to google cloud storage. This is the landing bucket with historical data (backfill.py)
+![landing bucket](/Users/jculat-ulula/hydro_data/markdown_assets/gcs_landing_bucket_w_historical.png)
