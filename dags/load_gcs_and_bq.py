@@ -1,11 +1,12 @@
 import os
 import glob
+
 from dotenv import load_dotenv, find_dotenv
-
 load_dotenv(find_dotenv())
-import sys
 
+import sys
 sys.path.append(os.getenv("SELENIUM_SCRIPT_FILEPATH"))
+
 from selenium_script import download_csv_raw
 from datetime import datetime, timedelta
 from airflow import DAG
@@ -44,7 +45,6 @@ check_variables()
 default_args = {
     "owner": "JC U",
     "depends_on_past": False,
-    "start_date": days_ago(1),
     "email_on_retry": False,
     "email_on_failure": False,
     "retries": 1,
@@ -53,7 +53,11 @@ default_args = {
 }
 
 with DAG(
-    "dag", schedule_interval="0 8 * * *", start_date=days_ago(1), catchup=False
+    "load_gcs_and_bq", 
+    schedule_interval="0 8 * * *", 
+    start_date=days_ago(1), 
+    catchup=False,
+    default_args=default_args
 ) as dag:
 
     download_yesterdays_csv = PythonOperator(
