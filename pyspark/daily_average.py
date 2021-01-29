@@ -1,3 +1,7 @@
+"""
+To be run in an pyspark_processing DAG on google dataproc 
+"""
+
 from pyspark.sql import SparkSession 
 
 spark = SparkSession.builder \
