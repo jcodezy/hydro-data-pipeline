@@ -1,6 +1,6 @@
 """
-This DAG is responsible for running analytical processing 
-from data that's already loaded to BQ. 
+This DAG is responsible for running a pyspark job on dataproc
+from BigQuery table and writing/appending to a new table. 
 
 Steps: 
 1. Create dataproc cluster
@@ -10,6 +10,8 @@ Steps:
 """
 
 import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 from airflow import DAG
 from airflow.utils.dates import days_ago
 from airflow.contrib.operators.dataproc_operator import (
@@ -20,11 +22,11 @@ from airflow.contrib.operators.dataproc_operator import (
 
 HYDRO_DATA_PROJECT_ID = os.getenv("HYDRO_DATA_PROJECT_ID")
 SPARK_BUCKET = os.getenv("SPARK_BUCKET")
-
+GOOGLE_CLOUD_STORAGE_CONN_ID = os.getenv("GOOGLE_CLOUD_STORAGE_CONN_ID")
 default_arguments = {"owner": "JC U", "start_date": days_ago(1)}
 
 with DAG(
-    "bigquery_data_analytics_processing",
+    "dataproc_analytics_processing",
     schedule_interval="0 8 * * *",
     catchup=False,
     default_args=default_arguments,
@@ -36,21 +38,28 @@ with DAG(
         cluster_name="spark-cluster-{{ ds_nodash }}",  # spark-cluster-YYYMMDD
         num_workers=2,
         storage_bucket=SPARK_BUCKET,
-        zone="us-west-1",
-        auto_delete_time=60,  # realistically shouldn't take any longer than 60s
+        region="us-west1",
+        zone="us-west1-a",
+        idle_delete_ttl=300,  #  5 mins is the min. value
+        gcp_conn_id=GOOGLE_CLOUD_STORAGE_CONN_ID,
     )
 
     calculate_daily_average_kwh = DataProcPySparkOperator(
         task_id="calculate_daily_average_kwh",
         main=f"gs://{SPARK_BUCKET}/pyspark/daily_average_kwh.py",
+        cluster_name="spark-cluster-{{ ds_nodash }}",
         dataproc_pyspark_jars="gs://spark-lib/bigquery/spark-bigquery-latest.jar",
+        gcp_conn_id=GOOGLE_CLOUD_STORAGE_CONN_ID,
+        region="us-west1",
     )
 
     delete_cluster = DataprocClusterDeleteOperator(
         task_id="delete_cluster",
         project_id=HYDRO_DATA_PROJECT_ID,
         cluster_name="spark-cluster-{{ ds_nodash }}",
-        trigger_rule="all_done",
+        trigger_rule="all_done",  # deletes cluster regardless when all tasks are done
+        gcp_conn_id=GOOGLE_CLOUD_STORAGE_CONN_ID,
+        region="us-west1",
     )
 
 create_cluster >> calculate_daily_average_kwh >> delete_cluster

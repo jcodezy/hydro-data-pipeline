@@ -57,7 +57,6 @@ with DAG(
     schedule_interval="0 8 * * *", 
     start_date=days_ago(1), 
     catchup=False,
-    default_args=default_args
 ) as dag:
 
     download_yesterdays_csv = PythonOperator(
