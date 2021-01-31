@@ -2,11 +2,11 @@
 My first data pipeline, using airflow, gcp and streamlit 
 
 ### Languages/Tools used:
-1. Python
-2. Airflow
-3. Google Cloud Platform (Google Cloud Storage & BigQuery) 
-4. Streamlit for data visualization (work in progress)
-5. SQL
+- Python
+- Airflow
+- GCP (Google Cloud Storage, BigQuery, DataProc) 
+- PySpark
+- SQL
 
 ### Introduction 
 #### This small data pipeline uses python and the airflow orchestration tool to run these tasks once per day. My electricity provider does not provide real-time data; instead only providing yesterday's data on the current day.
