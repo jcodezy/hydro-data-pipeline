@@ -53,6 +53,15 @@ with DAG(
         region="us-west1",
     )
 
+    calculate_daily_sum_kwh = DataProcPySparkOperator(
+        task_id="calculate_daily_sum_kwh",
+        main=f"gs://{SPARK_BUCKET}/pyspark/daily_sum_kwh.py",
+        cluster_name="spark-cluster-{{ ds_nodash }}",
+        dataproc_pyspark_jars="gs://spark-lib/bigquery/spark-bigquery-latest.jar",
+        gcp_conn_id=GOOGLE_CLOUD_STORAGE_CONN_ID,
+        region="us-west1"
+    )
+
     delete_cluster = DataprocClusterDeleteOperator(
         task_id="delete_cluster",
         project_id=HYDRO_DATA_PROJECT_ID,
@@ -62,4 +71,4 @@ with DAG(
         region="us-west1",
     )
 
-create_cluster >> calculate_daily_average_kwh >> delete_cluster
+create_cluster >> [calculate_daily_average_kwh, calculate_daily_sum_kwh] >> delete_cluster
