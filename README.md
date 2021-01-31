@@ -43,10 +43,12 @@ Runs once a day:
 
 DAG: [pyspark_procesing](https://github.com/jcodezy/hydro-data-pipeline/blob/master/dags/pyspark_processing.py)  
 ![pyspark dag](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/pyspark_dag.png)
+
 This DAG runs separately and simulates two "heavy" pyspark jobs running on GCP's DataProc service:
-    - read from bigquery table
-    - perform analytics 
-    - write to new bigquery table 
+- read from bigquery table
+- perform analytics 
+- write to new bigquery table 
+- delete dataproc cluster
 
 #### Future Improvements / TODO:
 - Implement more tests throughout 
