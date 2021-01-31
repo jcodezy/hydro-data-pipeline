@@ -21,7 +21,7 @@ daily_hydro_history.createOrReplaceTempView('daily_hydro_history')
 sum_kwh_per_day = spark.sql("""
 SELECT
     CAST(interval_start_date_time as DATE) as interval_day,
-    SUM(net_consumption_kwh) as sum_kwh
+    ROUND(SUM(net_consumption_kwh),2) as sum_kwh
 FROM 
     daily_hydro_history
 GROUP BY 1

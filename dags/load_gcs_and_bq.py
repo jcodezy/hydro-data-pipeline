@@ -54,7 +54,7 @@ default_args = {
 
 with DAG(
     "load_gcs_and_bq", 
-    schedule_interval="0 8 * * *", 
+    schedule_interval="0 16 * * *", # 8am local time
     start_date=days_ago(1), 
     catchup=False,
 ) as dag:

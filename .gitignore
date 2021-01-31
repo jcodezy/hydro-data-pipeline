@@ -1,3 +1,7 @@
+# DS Store
+.DS_Store
+dags/.DS_Store
+
 # GCP Config 
 jc-hydro-data-2331a7d59c64.json
 

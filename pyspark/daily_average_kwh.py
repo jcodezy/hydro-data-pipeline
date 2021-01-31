@@ -24,7 +24,7 @@ daily_hydro_history.createOrReplaceTempView('daily_hydro_history')
 avg_kwh_per_day = spark.sql("""
 SELECT 
     CAST(interval_start_date_time as DATE) as interval_day, 
-    AVG(net_consumption_kwh) as avg_kwh 
+    ROUND(AVG(net_consumption_kwh),2) as avg_kwh 
 FROM 
     daily_hydro_history 
 GROUP BY 1
