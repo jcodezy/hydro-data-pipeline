@@ -4,7 +4,7 @@ My data pipeline, using airflow, gcp, spark and streamlit.
 ### Introduction 
 #### This data pipeline downloads, cleans and uploads data to Google Cloud and then completes a few analytical jobs before getting put into a streamlit chart. 
 The streamlit chart once the jobs are complete: 
-![daily_sum_kwh_chart](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/daily_sum_kwh.png)
+![daily_sum_kwh_chart](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/chart_and_table_1.png)
 
 ### Languages/Tools used:
 - Python
@@ -41,7 +41,7 @@ Runs once a day:
 5. Transfer google cloud storage files to bigquery using 'WRITE_TRUNCATE' write_disposition; as bigquery has no fees on loading a bq table, I figured it was good to use WRITE_TRUNCATE to be idempotent. 
 ![bigquery schema](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/bigquery_schema.png)
 
-DAG: [pyspark_procesing](https://github.com/jcodezy/hydro-data-pipeline/blob/master/dags/pyspark_processing.py)  
+DAG: [pyspark_processing](https://github.com/jcodezy/hydro-data-pipeline/blob/master/dags/pyspark_processing.py)  
 ![pyspark dag](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/pyspark_dag.png)
 
 This DAG runs separately and simulates two "heavy" pyspark jobs running on GCP's DataProc service:
