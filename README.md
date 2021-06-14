@@ -2,7 +2,7 @@
 My data pipeline, using airflow, gcp, spark and streamlit. 
 
 ### Introduction 
-#### This data pipeline downloads, cleans and uploads my electricy data to Google Cloud and then completes a few analytical jobs before getting put into a streamlit chart. 
+#### This data pipeline uses a selenium script to download my electricity data, pandas to clean the data and into to a Data Lake (Google Cloud Storage), and then processed again into a Data Warehouse (BigQuery). The output is then graphed from the data warehouse into a streamlit chart (below).  
 The streamlit dashboard once the jobs are complete: 
 ![daily_sum_kwh_chart](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/chart_and_table_1.png)
 
@@ -45,6 +45,7 @@ Runs once a day:
 ![pyspark dag](https://github.com/jcodezy/hydro-data-pipeline/blob/master/markdown_assets/pyspark_dag.png)
 
 This DAG runs separately and simulates two "heavy" pyspark jobs running on GCP's DataProc service:
+Runs once per day: 
 - read from bigquery table
 - perform analytics 
 - write to new bigquery table 
